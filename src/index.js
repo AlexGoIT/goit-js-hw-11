@@ -17,7 +17,15 @@ function onSubmit(e) {
     return;
   }
 
-  getImages(searchQuery);
+  getImages(searchQuery).then(onSuccess).catch(onError);
 
   console.log(e.target.searchQuery.value);
 }
+
+function onSuccess(res) {
+  const totalHits = res.totalHits;
+  Notify.info(`Hooray! We found ${totalHits} images.`);
+  console.log(res);
+}
+
+function onError() {}
