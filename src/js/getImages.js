@@ -19,7 +19,6 @@ export async function getImages(searchQuery) {
   };
 
   return await axios.get(URL, params).then(res => {
-    console.log(res);
     return res.data;
   });
 }
