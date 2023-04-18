@@ -20,7 +20,14 @@ export function createImageCardMarkup(imageList) {
       }) =>
         `
     <div class="photo-card">
-      <a href="${largeImageURL}"><img src="${webformatURL}" alt="${tags}" loading="lazy" width="320" /></a>
+      <a class="gallery-link" href="${largeImageURL}">
+        <img
+          class="gallery-image"
+          src="${webformatURL}" 
+          alt="${tags}" 
+          width="320" 
+          loading="lazy" />
+      </a>
       <div class="info">
         <p class="info-item"><b>Likes</b>${likes}</p>
         <p class="info-item"><b>Views</b>${views}</p>

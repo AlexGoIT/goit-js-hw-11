@@ -9,7 +9,7 @@ import simpleLightbox from 'simplelightbox';
 const form = document.querySelector('#search-form');
 
 const galleryContainer = document.querySelector('.gallery');
-const lightBox = new SimpleLightbox('.gallery a');
+const lightBox = new SimpleLightbox('.gallery img[data-large]', {});
 
 form.addEventListener('submit', onSubmit);
 
@@ -30,11 +30,11 @@ function onSuccess(res) {
   Notify.info(`Hooray! We found ${totalHits} images.`);
   console.log(res);
 
-  lightBox.refresh();
-
-  const markup = createImageCardMarkup(res.hits); // Створюємо розмітку карток з результату пошуку
-
-  galleryContainer.insertAdjacentHTML('beforeend', markup);
+  // Створюємо розмітку карток з результату пошуку
+  galleryContainer.insertAdjacentHTML(
+    'beforeend',
+    createImageCardMarkup(res.hits)
+  );
 }
 
 function onError(err) {
