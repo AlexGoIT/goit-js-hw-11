@@ -25,7 +25,6 @@ export function createImageCardMarkup(imageList) {
           class="gallery-image"
           src="${webformatURL}" 
           alt="${tags}" 
-          width="320" 
           loading="lazy" />
       </a>
       <div class="info">
@@ -34,7 +33,8 @@ export function createImageCardMarkup(imageList) {
         <p class="info-item"><b>Comments</b>${comments}</p>
         <p class="info-item"><b>Downloads</b>${downloads}</p>
       </div>
-    </div>`
+    </div>
+    `
     )
     .join('');
 }

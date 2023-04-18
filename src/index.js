@@ -1,15 +1,16 @@
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 import { getImages } from './js/getImages';
 import { createImageCardMarkup } from './js/createImageCardMarkup';
-import simpleLightbox from 'simplelightbox';
 
 const form = document.querySelector('#search-form');
 
 const galleryContainer = document.querySelector('.gallery');
-const lightBox = new SimpleLightbox('.gallery img[data-large]', {});
+
+const lightBox = new SimpleLightbox('.gallery a');
 
 form.addEventListener('submit', onSubmit);
 
@@ -35,6 +36,8 @@ function onSuccess(res) {
     'beforeend',
     createImageCardMarkup(res.hits)
   );
+
+  lightBox.refresh();
 }
 
 function onError(err) {
