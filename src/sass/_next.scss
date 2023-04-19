@@ -1,1 +1,15 @@
-// next
+.next-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: 30px;
+}
+
+.load-more {
+  min-width: 150px;
+  height: 40px;
+  border-radius: 4px;
+  background-color: rgb(53, 53, 146);
+  color: #ffffff;
+}

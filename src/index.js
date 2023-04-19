@@ -5,15 +5,15 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { getImages } from './js/getImages';
 import { createImageCardMarkup } from './js/createImageCardMarkup';
 
+const PER_PAGE = 40;
+let searchQuery = '';
+let pageCount = 1;
+
 const refs = {
   searchForm: document.querySelector('#search-form'),
   gallery: document.querySelector('.gallery'),
   loadMoreBtn: document.querySelector('.load-more'),
 };
-
-const PER_PAGE = 40;
-let searchQuery = '';
-let pageCount = 1;
 
 refs.searchForm.addEventListener('submit', onSubmit);
 refs.loadMoreBtn.addEventListener('click', onLoadMore);
@@ -44,9 +44,9 @@ function onSubmit(e) {
 
 async function renderUI() {
   try {
-    const res = await getImages(searchQuery, pageCount);
-  
-    const { totalHits } = res;
+    const response = await getImages(searchQuery, pageCount);
+
+    const { totalHits, hits } = response;
 
     if (totalHits === 0) {
       Notify.failure(
@@ -58,34 +58,42 @@ async function renderUI() {
     }
 
     // Створюємо розмітку карток з результату пошуку
-    refs.gallery.insertAdjacentHTML('beforeend', createImageCardMarkup(res.hits));
+    refs.gallery.insertAdjacentHTML(
+      'beforeend',
+      createImageCardMarkup(hits)
+    );
 
     if (pageCount * PER_PAGE < totalHits) {
       refs.loadMoreBtn.classList.remove('is-hidden');
       scroll();
+    } else {
+      refs.loadMoreBtn.classList.add('is-hidden');
     }
-  
+
     lightBox.refresh();
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
     Notify.failure(`Oops, something went wrong: ${error.message}`);
   }
 }
 
 function onLoadMore() {
   pageCount++;
+
   renderUI();
 }
 
 function scroll() {
+  if (pageCount <= 1) {
+    return;
+  }
+
   const { height: cardHeight } = document
     .querySelector('.gallery')
     .firstElementChild.getBoundingClientRect();
 
-  if (pageCount > 1) {
-    window.scrollBy({
-      top: cardHeight * 2,
-      behavior: 'smooth',
-    });
-  }
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
 }

@@ -1,22 +1,14 @@
-// webformatURL - посилання на маленьке зображення для списку карток.
-// largeImageURL - посилання на велике зображення.
-// tags - рядок з описом зображення. Підійде для атрибуту alt.
-// likes - кількість лайків.
-// views - кількість переглядів.
-// comments - кількість коментарів.
-// downloads - кількість завантажень.
-
 export function createImageCardMarkup(imageList) {
   return imageList
     .map(
       ({
-        webformatURL,
-        largeImageURL,
-        tags,
-        likes,
-        views,
-        comments,
-        downloads,
+        webformatURL,  // посилання на маленьке зображення для списку карток.
+        largeImageURL,  // largeImageURL - посилання на велике зображення.
+        tags,  // рядок з описом зображення. Підійде для атрибуту alt.
+        likes,  // кількість лайків.
+        views,  // кількість переглядів.
+        comments,  // кількість коментарів.
+        downloads,  // кількість завантажень.
       }) =>
         `
     <div class="photo-card">
