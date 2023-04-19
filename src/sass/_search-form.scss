@@ -7,17 +7,22 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(25, 25, 112);
+  background-color: rgba(42, 42, 119, 0.9);
 }
 
 .search-form > input {
   height: 30px;
   border-radius: 4px;
-  border: none;
 }
 
 .search-form > button {
   height: 30px;
   border-radius: 4px;
-  border: none;
+  background-color: rgb(187, 190, 3);
+  color: #0300c5;
+  font-weight: 700;
+}
+
+.search-form > button:is(:hover, :focus) {
+  background-color: rgb(251, 255, 0);
 }

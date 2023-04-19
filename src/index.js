@@ -26,6 +26,7 @@ const lightBox = new SimpleLightbox('.gallery a', {
 function onSubmit(e) {
   e.preventDefault();
 
+  refs.loadMoreBtn.classList.add('is-hidden');
   searchQuery = e.target.searchQuery.value.trim();
 
   if (!searchQuery) {
@@ -34,7 +35,6 @@ function onSubmit(e) {
   }
 
   refs.gallery.innerHTML = '';
-  refs.loadMoreBtn.classList.add('is-hidden');
 
   e.target.reset();
   pageCount = 1;
@@ -65,6 +65,9 @@ async function renderUI() {
       scroll();
     } else {
       refs.loadMoreBtn.classList.add('is-hidden');
+      Notify.failure(
+        "We're sorry, but you've reached the end of search results."
+      );
     }
 
     lightBox.refresh();
