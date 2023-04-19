@@ -54,14 +54,11 @@ async function renderUI() {
       );
       return;
     } else if (pageCount === 1) {
-      Notify.info(`Hooray! We found ${totalHits} images.`);
+      Notify.success(`Hooray! We found ${totalHits} images.`);
     }
 
     // Створюємо розмітку карток з результату пошуку
-    refs.gallery.insertAdjacentHTML(
-      'beforeend',
-      createImageCardMarkup(hits)
-    );
+    refs.gallery.insertAdjacentHTML('beforeend', createImageCardMarkup(hits));
 
     if (pageCount * PER_PAGE < totalHits) {
       refs.loadMoreBtn.classList.remove('is-hidden');
