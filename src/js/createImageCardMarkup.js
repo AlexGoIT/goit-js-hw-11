@@ -33,6 +33,7 @@ export function createImageCardMarkup(imageList) {
         <p class="info-item"><b>Comments</b>${comments}</p>
         <p class="info-item"><b>Downloads</b>${downloads}</p>
       </div>
+      
     </div>
     `
     )

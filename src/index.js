@@ -4,35 +4,36 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { getImages } from './js/getImages';
 import { createImageCardMarkup } from './js/createImageCardMarkup';
 
-const form = document.querySelector('#search-form');
-form.addEventListener('submit', onSubmit);
+const refs = {
+  searchForm: document.querySelector('#search-form'),
+  gallery: document.querySelector('.gallery'),
+  loadMoreBtn: document.querySelector('.load-more'),
+};
 
-const galleryContainer = document.querySelector('.gallery');
+const PER_PAGE = 40;
+let searchQuery = '';
+let pageCount = 1;
 
-const loadMoreBtn = document.querySelector('.load-more');
-loadMoreBtn.addEventListener('click', onLoadMore);
+refs.searchForm.addEventListener('submit', onSubmit);
+refs.loadMoreBtn.addEventListener('click', onLoadMore);
 
 const lightBox = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
   captionDelay: 250,
 });
 
-const PER_PAGE = 40;
-let searchQuery = '';
-let pageCount = 1;
-// let totalHits = 0;
-
 function onSubmit(e) {
   e.preventDefault();
 
-  searchQuery = e.target.searchQuery.value;
+  searchQuery = e.target.searchQuery.value.trim();
 
   if (!searchQuery) {
     Notify.failure("We're sorry, but the search string cannot be empty!");
     return;
   }
 
-  galleryContainer.innerHTML = '';
+  refs.gallery.innerHTML = '';
+  e.target.reset();
 
   getImages(searchQuery, pageCount).then(onSuccess).catch(onError);
 }
@@ -41,29 +42,26 @@ function onSuccess(res) {
   const { totalHits } = res;
 
   if (totalHits === 0) {
-    Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+    Notify.failure(
+      'Sorry, there are no images matching your search query. Please try again.'
+    );
     return;
-  } else if (pageCount ===1) {
+  } else if (pageCount === 1) {
     Notify.info(`Hooray! We found ${totalHits} images.`);
-    form.reset();
   }
 
   // Створюємо розмітку карток з результату пошуку
-  galleryContainer.insertAdjacentHTML(
-    'beforeend',
-    createImageCardMarkup(res.hits)
-  );
-
-  console.log(pageCount, pageCount * PER_PAGE, totalHits);
+  refs.gallery.insertAdjacentHTML('beforeend', createImageCardMarkup(res.hits));
 
   if (pageCount * PER_PAGE >= totalHits) {
-    loadMoreBtn.classList.add('is-hidden');
+    refs.loadMoreBtn.classList.add('is-hidden');
     pageCount = 1;
   } else {
-    loadMoreBtn.classList.remove('is-hidden');
+    refs.loadMoreBtn.classList.remove('is-hidden');
+    scroll();
     pageCount++;
   }
-
+  
   lightBox.refresh();
 }
 
@@ -74,4 +72,17 @@ function onError(err) {
 
 function onLoadMore() {
   getImages(searchQuery, pageCount).then(onSuccess).catch(onError);
+}
+
+function scroll() {
+  const { height: cardHeight } = document
+    .querySelector('.gallery')
+    .firstElementChild.getBoundingClientRect();
+
+  if (pageCount > 1) {
+    window.scrollBy({
+      top: cardHeight * 2,
+      behavior: 'smooth',
+    });
+  }
 }
