@@ -7,9 +7,6 @@ export async function getImages(searchQuery, pageCount) {
   const params = {
     params: {
       timeout: 1000,
-      // headers: {
-      //   'X-Requested-With': 'XMLHttpRequest',
-      // },
       key: API_KEY,
       q: searchQuery,
       image_type: 'photo',
@@ -21,7 +18,6 @@ export async function getImages(searchQuery, pageCount) {
   };
 
   return await axios.get(URL, params).then(res => {
-    pageCount++;
     console.log(res);
     return res.data;
   });

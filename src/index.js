@@ -1,8 +1,6 @@
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-
 import { getImages } from './js/getImages';
 import { createImageCardMarkup } from './js/createImageCardMarkup';
 
@@ -14,10 +12,15 @@ const galleryContainer = document.querySelector('.gallery');
 const loadMoreBtn = document.querySelector('.load-more');
 loadMoreBtn.addEventListener('click', onLoadMore);
 
-const lightBox = new SimpleLightbox('.gallery a');
+const lightBox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+});
 
+const PER_PAGE = 40;
 let searchQuery = '';
 let pageCount = 1;
+// let totalHits = 0;
 
 function onSubmit(e) {
   e.preventDefault();
@@ -35,8 +38,15 @@ function onSubmit(e) {
 }
 
 function onSuccess(res) {
-  const totalHits = res.totalHits;
-  Notify.info(`Hooray! We found ${totalHits} images.`);
+  const { totalHits } = res;
+
+  if (totalHits === 0) {
+    Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+    return;
+  } else if (pageCount ===1) {
+    Notify.info(`Hooray! We found ${totalHits} images.`);
+    form.reset();
+  }
 
   // Створюємо розмітку карток з результату пошуку
   galleryContainer.insertAdjacentHTML(
@@ -44,8 +54,15 @@ function onSuccess(res) {
     createImageCardMarkup(res.hits)
   );
 
-  loadMoreBtn.classList.remove('is-hidden');
-  pageCount++;
+  console.log(pageCount, pageCount * PER_PAGE, totalHits);
+
+  if (pageCount * PER_PAGE >= totalHits) {
+    loadMoreBtn.classList.add('is-hidden');
+    pageCount = 1;
+  } else {
+    loadMoreBtn.classList.remove('is-hidden');
+    pageCount++;
+  }
 
   lightBox.refresh();
 }
@@ -57,5 +74,4 @@ function onError(err) {
 
 function onLoadMore() {
   getImages(searchQuery, pageCount).then(onSuccess).catch(onError);
-  pageCount++;
 }

@@ -4,6 +4,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
   background-color: midnightblue;
+}
+
+.search-form > input {
+  height: 30px;
+}
+
+.search-form > button {
+  height: 30px;
 }
