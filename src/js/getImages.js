@@ -18,8 +18,6 @@ export async function getImages(searchQuery, pageCount) {
     },
   };
 
-  return await axios.get(URL, params).then(res => {
-    console.log(res);
-    return res.data;
-  });
+  const response = await axios.get(URL, params);
+  return response.data;
 }

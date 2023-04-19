@@ -1,6 +1,7 @@
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
 import { getImages } from './js/getImages';
 import { createImageCardMarkup } from './js/createImageCardMarkup';
 
@@ -33,45 +34,47 @@ function onSubmit(e) {
   }
 
   refs.gallery.innerHTML = '';
+  refs.loadMoreBtn.classList.add('is-hidden');
+
   e.target.reset();
+  pageCount = 1;
 
-  getImages(searchQuery, pageCount).then(onSuccess).catch(onError);
+  renderUI();
 }
 
-function onSuccess(res) {
-  const { totalHits } = res;
-
-  if (totalHits === 0) {
-    Notify.failure(
-      'Sorry, there are no images matching your search query. Please try again.'
-    );
-    return;
-  } else if (pageCount === 1) {
-    Notify.info(`Hooray! We found ${totalHits} images.`);
-  }
-
-  // Створюємо розмітку карток з результату пошуку
-  refs.gallery.insertAdjacentHTML('beforeend', createImageCardMarkup(res.hits));
-
-  if (pageCount * PER_PAGE >= totalHits) {
-    refs.loadMoreBtn.classList.add('is-hidden');
-    pageCount = 1;
-  } else {
-    refs.loadMoreBtn.classList.remove('is-hidden');
-    scroll();
-    pageCount++;
-  }
+async function renderUI() {
+  try {
+    const res = await getImages(searchQuery, pageCount);
   
-  lightBox.refresh();
-}
+    const { totalHits } = res;
 
-function onError(err) {
-  Notify.failure(`Oops, something went wrong: ${err.message}`);
-  console.log(err);
+    if (totalHits === 0) {
+      Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+      return;
+    } else if (pageCount === 1) {
+      Notify.info(`Hooray! We found ${totalHits} images.`);
+    }
+
+    // Створюємо розмітку карток з результату пошуку
+    refs.gallery.insertAdjacentHTML('beforeend', createImageCardMarkup(res.hits));
+
+    if (pageCount * PER_PAGE < totalHits) {
+      refs.loadMoreBtn.classList.remove('is-hidden');
+      scroll();
+    }
+  
+    lightBox.refresh();
+  } catch (error) {
+    console.log(error);
+    Notify.failure(`Oops, something went wrong: ${error.message}`);
+  }
 }
 
 function onLoadMore() {
-  getImages(searchQuery, pageCount).then(onSuccess).catch(onError);
+  pageCount++;
+  renderUI();
 }
 
 function scroll() {
