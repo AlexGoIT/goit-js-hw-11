@@ -102,7 +102,6 @@ function onScroll() {
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
 
   if (scrollTop + clientHeight >= scrollHeight - 5 && !isLoading) {
-    console.log(pageCount);
     if (pageCount < totalPages) {
       onLoadMore();
     } else {
