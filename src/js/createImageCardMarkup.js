@@ -2,13 +2,13 @@ export function createImageCardMarkup(imageList) {
   return imageList
     .map(
       ({
-        webformatURL,  // посилання на маленьке зображення для списку карток.
-        largeImageURL,  // largeImageURL - посилання на велике зображення.
-        tags,  // рядок з описом зображення. Підійде для атрибуту alt.
-        likes,  // кількість лайків.
-        views,  // кількість переглядів.
-        comments,  // кількість коментарів.
-        downloads,  // кількість завантажень.
+        webformatURL, // посилання на маленьке зображення для списку карток.
+        largeImageURL, // largeImageURL - посилання на велике зображення.
+        tags, // рядок з описом зображення. Підійде для атрибуту alt.
+        likes, // кількість лайків.
+        views, // кількість переглядів.
+        comments, // кількість коментарів.
+        downloads, // кількість завантажень.
       }) =>
         `
     <div class="photo-card">

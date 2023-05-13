@@ -12,7 +12,7 @@ export async function getImages(searchQuery, pageCount) {
       q: searchQuery,
       image_type: 'photo',
       orientation: 'horizontal',
-      safesearch: 'true',
+      safesearch: 'false',
       page: pageCount,
       per_page: PER_PAGE,
     },
